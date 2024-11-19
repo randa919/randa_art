@@ -1,11 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather App</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url("5GpD.gif");
+            background-color: #78d6ed;
+            margin: 0;
+            padding: 0;     
+}
+        
+        .container {
+            max-width: 650px;
+            margin: 20px auto;
+            background-color: #ffffff41;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 36px;
+            color: #000000;
+            text-align: center;
+            margin-bottom: 20px;
+     
+        }
+        h2 {
+            font-size: 24px;
+            color: #000000;
+            margin-top: 20px;
+            
+        }
+        .weather {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid #000000;
+        }
+        .title {
+            font-size: 18px;
+            color: #000000;
+            font-weight: bold;
+        }
+         .use {
+            font-size: 20px;
+            color: #000000;
+        }
+        #icon {
+            width: 100px;
+            height: auto;
+        }
+        #search-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #location {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+        #button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #1084cd;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #button:hover {
+            background-color: #1e3ef1;
+        }
+    </style>
+
+    
 </head>
 <body>
- <1>hello, hi</1>   
+    <div class="container">
+        <h1>Weather App</h1>
+        <div id="search-box">
+            <input type="text" id="location" placeholder="Enter location">
+            <button id="button">Search</button>
+        </div>
+        <div class="weather">
+            <div class="title">Temperature:</div>
+            <div class="use" id="temperature"></div>
+        </div>
+        <div class="weather">
+            <div class="title">Humidity:</div>
+            <div class="use" id="humidity"></div>
+        </div>
+        <div class="weather">
+            <div class="title">Pressure:</div>
+            <div class="use" id="pressure"></div>
+        </div>
+        <div class="weather">
+            <div class="title">Weather:</div>
+            <img id="icon" src="" alt="Weather Icon">
+        </div>
+    </div>
+
+    <script>
+        let api_key = '29a821421b02d0ef92c476f1e1d6fbd7'; 
+
+        async function getWeather(location) {
+            let response = await fetch('https://api.openweathermap.org/data/2.5/weather?' + new URLSearchParams({
+                q: location,
+                units: 'metric',
+                appid: api_key
+            }));
+            let data = await response.json();
+            console.log(data);
+
+            document.querySelector('#temperature').textContent = data.main.temp + " °C";
+            document.querySelector('#humidity').textContent = data.main.humidity + "%";
+            document.querySelector('#pressure').textContent = data.main.pressure + " hPa";
+            document.querySelector('#icon').src = 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '.png';
+        }
+
+    
+        getWeather('Ontario');
+
+        
+        document.getElementById('button').addEventListener('click', function() {
+            let location = document.getElementById('location').value.trim();
+            if (location !== '') {
+                getWeather(location);
+            }
+        });
+    </script>
 </body>
 </html>
